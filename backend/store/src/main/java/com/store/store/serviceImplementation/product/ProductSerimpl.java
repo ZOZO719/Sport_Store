@@ -3,6 +3,7 @@ package com.store.store.serviceImplementation.product;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.store.store.dtos.product.CreateProductRequest;
 import com.store.store.dtos.product.ProductDto;
@@ -44,6 +45,13 @@ public class ProductSerimpl implements ProductService{
                 .stream()
                 .map(productMapper::toDto)
                 .toList();
+    }
+
+    @Override
+    public List<ProductDto> getProductsByCategory( String categoryName){
+        List<ProductDto> productByCategory= productRepo.findByCategory_CategoryName(categoryName).stream().map(productMapper::toDto).toList();
+        return productByCategory;
+
     }
 
     @Override

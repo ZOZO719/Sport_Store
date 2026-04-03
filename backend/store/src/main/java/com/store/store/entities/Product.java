@@ -71,7 +71,8 @@ public class Product {
     @JsonManagedReference
     private List<ProductImage> images;
 
-    
+    @Column(name = "total_sold")
+    private int totalSold=0;
 
     
 

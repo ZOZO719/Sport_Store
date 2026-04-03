@@ -18,6 +18,8 @@ import com.store.store.dtos.product.UpdateProductRequest;
 import com.store.store.service.productser.ProductService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/products")
@@ -46,6 +48,13 @@ public class ProductController {
 
         return ResponseEntity.ok(productService.getProductById(id));
     }
+
+    @GetMapping("/api/{categoryName}")
+    public ResponseEntity<List<ProductDto>> getProductsByCategory(@PathVariable String categoryName) {
+        List<ProductDto> filteredProducts = productService.getProductsByCategory(categoryName);
+        return ResponseEntity.ok(filteredProducts);
+    }
+    
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(

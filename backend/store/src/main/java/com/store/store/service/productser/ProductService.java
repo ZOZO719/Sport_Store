@@ -15,6 +15,8 @@ public interface ProductService {
     List<ProductDto> getAllProducts();
 
     ProductDto getProductById(Long id);
+    
+    List<ProductDto> getProductsByCategory(String categoryName);
 
     ProductDto updateProduct(Long id, UpdateProductRequest dto);
 

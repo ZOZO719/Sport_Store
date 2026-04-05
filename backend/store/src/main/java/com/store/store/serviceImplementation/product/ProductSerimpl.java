@@ -3,8 +3,6 @@ package com.store.store.serviceImplementation.product;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.store.store.dtos.product.CreateProductRequest;
 import com.store.store.dtos.product.ProductDto;
 import com.store.store.dtos.product.UpdateProductRequest;

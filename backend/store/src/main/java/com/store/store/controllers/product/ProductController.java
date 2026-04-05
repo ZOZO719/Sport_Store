@@ -18,7 +18,7 @@ import com.store.store.dtos.product.UpdateProductRequest;
 import com.store.store.service.productser.ProductService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestParam;
+// import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController

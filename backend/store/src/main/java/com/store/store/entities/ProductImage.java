@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "productImage")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ProductImage {
 

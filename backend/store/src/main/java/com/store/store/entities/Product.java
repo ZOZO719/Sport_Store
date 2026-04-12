@@ -10,7 +10,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -46,11 +48,20 @@ public class Product {
     private BigDecimal productPrice;
 
     @Positive
-    @Column(name = "productQunatity",nullable = false)
-    private int productQunatity = 0;
+    @Column(name = "product_quantity",nullable = false)
+    private int productQuantity  = 0;
 
     @Column(name = "discountPercent")
-    private int discountPercent;
+    private BigDecimal discountPercent;
+
+    @Column(name = "brand")
+    private String brand;
+
+    @ElementCollection
+    @CollectionTable(name = "product_sizes", joinColumns = @JoinColumn(name = "product_id"))
+    @Column(name = "size")
+    private List<String> sizes;
+
 
     @Column(name = "isActive")
     private boolean isActive = true;
@@ -73,6 +84,9 @@ public class Product {
 
     @Column(name = "total_sold")
     private int totalSold=0;
+
+    @Column(name = "item_type")
+    private String itemType ;
 
     
 

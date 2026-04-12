@@ -1,6 +1,7 @@
 package com.store.store.dtos.product;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import lombok.Data;
 
@@ -12,11 +13,17 @@ public class CreateProductRequest {
 
     private BigDecimal productPrice;
 
-    private int productQunatity;
+    private int productQuantity;
 
     private int discountPercent;
 
     private boolean isActive;
+
+    private String itemType;
+    
+    private String brand;
+
+    private List<String> sizes;
 
     private Long categoryId;
 

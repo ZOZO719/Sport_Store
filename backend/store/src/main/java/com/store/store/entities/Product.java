@@ -88,6 +88,9 @@ public class Product {
     @Column(name = "item_type")
     private String itemType ;
 
+    //adding reviews 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
     
 
 

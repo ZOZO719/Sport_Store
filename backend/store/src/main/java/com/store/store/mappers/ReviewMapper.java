@@ -10,6 +10,6 @@ import com.store.store.entities.Review;
 public interface ReviewMapper {
 
     // source = "user.userName" يعني خذ userName من جوا الـ user object
-    @Mapping(source = "user.userName", target = "userName")
+    @Mapping(source = "user.username", target = "userName")
     ReviewDto toDto(Review review);
 }

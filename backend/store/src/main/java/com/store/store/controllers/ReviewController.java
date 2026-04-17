@@ -1,5 +1,6 @@
 package com.store.store.controllers;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.store.store.dtos.Review.CreateReviewRequest;
 import com.store.store.dtos.Review.ReviewDto;
+import com.store.store.entities.User;
+import com.store.store.repository.UserRepo;
 import com.store.store.service.ReviewService;
 
 import jakarta.validation.Valid;
@@ -24,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final UserRepo userRepo;
 
     // GET /api/products/{id}/reviews
     // PUBLIC — أي شخص يقدر يقرأ الـ reviews
@@ -32,14 +36,21 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getProductReviews(id));
     }
 
-    // POST /api/products/{id}/reviews
-    // USER — بس المسجلين يقدروا يكتبوا review
-    // هلق بنمرر userId كـ param — لاحقاً بنجيبه من الـ JWT تلقائياً
-    @PostMapping("/{id}/reviews")
-    public ResponseEntity<ReviewDto> addReview(
-            @PathVariable Long id,
-            @RequestParam Long userId,        // مؤقت — رح يتغير لما نضيف JWT
-            @Valid @RequestBody CreateReviewRequest request) {
-        return ResponseEntity.ok(reviewService.addReview(id, userId, request));
-    }
+   // ✅ بدل @RequestParam Long userId — نجيب الـ user من الـ JWT
+@PostMapping("/{id}/reviews")
+public ResponseEntity<ReviewDto> addReview(
+        @PathVariable Long id,
+        @Valid @RequestBody CreateReviewRequest request,
+        // ✅ Principal بيجيب الـ authenticated user تلقائياً من الـ SecurityContext
+        // اللي حطه الـ JwtAuthFilter
+        Principal principal) {
+
+    // principal.getName() بيرجع الـ email اللي حطيناه كـ subject بالـ JWT
+    String email = principal.getName();
+
+    User user = userRepo.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    return ResponseEntity.ok(reviewService.addReview(id, user.getId(), request));
+}
 }

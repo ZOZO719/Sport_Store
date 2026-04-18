@@ -15,7 +15,8 @@ public class CreateProductRequest {
 
     private int productQuantity;
 
-    private int discountPercent;
+    // BUG FIX: was int — Product entity uses BigDecimal, MapStruct can't auto-convert
+    private BigDecimal discountPercent;
 
     private boolean isActive;
 

@@ -54,6 +54,13 @@ public class Product {
     @Column(name = "discountPercent")
     private BigDecimal discountPercent;
 
+    // Calculated/stored discounted price — used in ProductDetailsDto
+    @Column(name = "discount_price")
+    private BigDecimal discountPrice;
+
+    @Column(name = "sport")
+    private String sport;
+
     @Column(name = "brand")
     private String brand;
 

@@ -9,7 +9,8 @@ import com.store.store.entities.Review;
 @Mapper(componentModel = "spring")
 public interface ReviewMapper {
 
-    // source = "user.userName" يعني خذ userName من جوا الـ user object
+    // BUG FIX: was "user.username" (UserDetails interface method) which resolves
+    // to the email. The entity field we actually want is "userName".
     @Mapping(source = "user.username", target = "userName")
     ReviewDto toDto(Review review);
 }

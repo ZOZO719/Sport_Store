@@ -1,59 +1,59 @@
-// package com.store.store.config;
+package com.store.store.config;
 
-// import java.util.List;
+import java.util.List;
 
-// import org.springframework.context.annotation.Bean;
-// import org.springframework.context.annotation.Configuration;
-// import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 // import org.springframework.security.authentication.AuthenticationProvider;
-// // import org.springframework.security.authentication.AuthenticationProvider;
-// import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-// import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-// import org.springframework.security.core.userdetails.UserDetailsService;
-// import org.springframework.security.core.userdetails.UsernameNotFoundException;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.web.cors.CorsConfiguration;
-// import org.springframework.web.cors.CorsConfigurationSource;
-// import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-// import com.store.store.repository.UserRepo;
+import com.store.store.repository.UserRepo;
 
-// import lombok.RequiredArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-// @Configuration
-// @RequiredArgsConstructor
-// public class ApplicationConfig {
-//     private final UserRepo userRepo;
+@Configuration
+@RequiredArgsConstructor
+public class ApplicationConfig {
+    private final UserRepo userRepo;
 
-//      // ✅ UserDetailsService — Spring Security بيستخدمه يجيب الـ User من الـ DB
-//     @Bean
-//     public UserDetailsService userDetailsService() {
-//         return email -> userRepo.findByEmail(email)
-//                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-//     }
+     // ✅ UserDetailsService — Spring Security بيستخدمه يجيب الـ User من الـ DB
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return email -> userRepo.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 
-//     // ✅ AuthenticationProvider — بيربط الـ UserDetailsService مع الـ PasswordEncoder
-//     @Bean
-//     public AuthenticationProvider authenticationProvider() {
-//         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-//         provider.setUserDetailsService(userDetailsService());
-//         provider.setPasswordEncoder(passwordEncoder());
-//         return provider;
-//     }
+    // ✅ AuthenticationProvider — بيربط الـ UserDetailsService مع الـ PasswordEncoder
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService());
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
 
-//     // ✅ AuthenticationManager — بيستخدمه الـ AuthService وقت الـ login
-//     @Bean
-//     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-//             throws Exception {
-//         return config.getAuthenticationManager();
-//     }
+    // ✅ AuthenticationManager — بيستخدمه الـ AuthService وقت الـ login
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
+            throws Exception {
+        return config.getAuthenticationManager();
+    }
 
-//     // ✅ BCrypt — أفضل طريقة لتشفير الـ passwords
-//     @Bean
-//     public PasswordEncoder passwordEncoder() {
-//         return new BCryptPasswordEncoder();
-//     }
+    // ✅ BCrypt — أفضل طريقة لتشفير الـ passwords
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
    
-// }
+}

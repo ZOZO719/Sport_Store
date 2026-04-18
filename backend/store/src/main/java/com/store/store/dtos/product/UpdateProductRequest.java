@@ -13,7 +13,7 @@ public class UpdateProductRequest {
 
     private BigDecimal productPrice;
 
-    private int productQunatity;
+    private int productQuantity;
 
     private int discountPercent;
 

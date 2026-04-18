@@ -1,6 +1,5 @@
 package com.store.store.service.auth;
 
-import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -19,10 +18,11 @@ public class JwtService {
 
     private static final String SECRET =
         "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
-    private static final long ACCESS_EXPIRY  = 1000L * 60 * 15;        // 15 دقيقة
-    private static final long REFRESH_EXPIRY = 1000L * 60 * 60 * 24 * 7; // 7 أيام
+    private static final long ACCESS_EXPIRY  = 1000L * 60 * 15;           // 15 min
+    private static final long REFRESH_EXPIRY = 1000L * 60 * 60 * 24 * 7; // 7 days
 
-    private Key signingKey() {
+    // BUG FIX: return type must be SecretKey (not Key) to use with .verifyWith()
+    private SecretKey signingKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -45,27 +45,28 @@ public class JwtService {
     }
 
     public String extractEmail(String token) {
-        return extractClaims(token , Claims::getSubject);
+        return extractClaims(token, Claims::getSubject);
     }
 
     public boolean isTokenValid(String token, String email) {
         try {
             return extractEmail(token).equals(email)
-                && !extractClaims(token).getExpiration().before(new Date());
+                && !extractClaims(token, Claims::getExpiration).before(new Date());
         } catch (JwtException e) {
             return false;
         }
     }
-    public <T> T extractClaims(String token , Function<Claims, T> claimsReslover){
+
+    public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
-        return claimsReslover.apply(claims);
+        return claimsResolver.apply(claims);
     }
 
-    // private — مش محتاج يكون public
     private Claims extractAllClaims(String token) {
+        // BUG FIX: was setSigningKey() which is deprecated in jjwt 0.12.x — use verifyWith()
         return Jwts.parser()
-                .setSigningKey(signingKey())
-                .build() 
+                .verifyWith(signingKey())
+                .build()
                 .parseSignedClaims(token)
                 .getPayload();
     }

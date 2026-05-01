@@ -12,7 +12,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.store.store.repository.UserRepo;
+// import com.store.store.repository.UserRepo;
 // import com.store.store.config.JwtFilter;
 
 import lombok.RequiredArgsConstructor;

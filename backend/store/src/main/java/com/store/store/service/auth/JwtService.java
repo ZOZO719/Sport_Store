@@ -1,17 +1,18 @@
 package com.store.store.service.auth;
 
 import java.util.Date;
+import java.util.HexFormat;
 import java.util.function.Function;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class JwtService {
@@ -23,8 +24,8 @@ public class JwtService {
 
     // BUG FIX: return type must be SecretKey (not Key) to use with .verifyWith()
     private SecretKey signingKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
-        return Keys.hmacShaKeyFor(keyBytes);
+        byte[] keyBytes = HexFormat.of().parseHex(SECRET);
+        return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
     public String generateAccessToken(String email) {
@@ -37,10 +38,10 @@ public class JwtService {
 
     private String buildToken(String email, long expiry) {
         return Jwts.builder()
-                .subject(email)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expiry))
-                .signWith(signingKey())
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiry))
+                .signWith(SignatureAlgorithm.HS256, signingKey())
                 .compact();
     }
 
@@ -63,11 +64,9 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        // BUG FIX: was setSigningKey() which is deprecated in jjwt 0.12.x — use verifyWith()
         return Jwts.parser()
-                .verifyWith(signingKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .setSigningKey(signingKey())
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

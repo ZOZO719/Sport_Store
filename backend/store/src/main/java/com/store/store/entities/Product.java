@@ -58,8 +58,6 @@ public class Product {
     @Column(name = "discount_price")
     private BigDecimal discountPrice;
 
-    @Column(name = "sport")
-    private String sport;
 
     @Column(name = "brand")
     private String brand;
